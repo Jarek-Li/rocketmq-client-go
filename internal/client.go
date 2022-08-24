@@ -201,7 +201,6 @@ func GetOrNewRocketMQClient(option ClientOptions, callbackCh chan interface{}) R
 
 	if loaded {
 		// compare namesrv address
-		client = actual.(*rmqClient)
 		namesrv := option.Namesrv
 		resolver := namesrv.(*namesrvs).resolver
 		now := resolver.Resolve()
@@ -210,6 +209,8 @@ func GetOrNewRocketMQClient(option ClientOptions, callbackCh chan interface{}) R
 			"option.Namesrv.(*namesrvs).resolver": resolver,
 			"option.Namesrv":                      namesrv,
 		})
+
+		client = actual.(*rmqClient)
 		srv := client.GetNameSrv()
 		nsResolver := srv.(*namesrvs).resolver
 		old := nsResolver.Resolve()
@@ -217,6 +218,7 @@ func GetOrNewRocketMQClient(option ClientOptions, callbackCh chan interface{}) R
 			"NewNameSrv": old,
 			"client.GetNameSrv().(*namesrvs).resolver": nsResolver,
 			"client.GetNameSrv()":                      srv,
+			"actual.(*rmqClient)":                      client,
 		})
 		if len(now) != len(old) {
 			rlog.Error("different namesrv option in the same instance", map[string]interface{}{
