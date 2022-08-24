@@ -198,7 +198,12 @@ func GetOrNewRocketMQClient(option ClientOptions, callbackCh chan interface{}) R
 		done:         make(chan struct{}),
 	}
 	actual, loaded := clientMap.LoadOrStore(client.ClientID(), client)
-
+	rlog.Info("clientMap.LoadOrStore(client.ClientID(), client)", map[string]interface{}{
+		"client.ClientID()": client.ClientID(),
+		"client":            client,
+		"loaded":            loaded,
+		"actual":            actual,
+	})
 	if loaded {
 		// compare namesrv address
 		namesrv := option.Namesrv
