@@ -197,6 +197,10 @@ func GetOrNewRocketMQClient(option ClientOptions, callbackCh chan interface{}) R
 		remoteClient: remote.NewRemotingClient(option.RemotingClientConfig),
 		done:         make(chan struct{}),
 	}
+	rlog.Info("clientMap sync.Map", map[string]interface{}{
+		"client.ClientID()": client.ClientID(),
+		"clientMap":         &clientMap,
+	})
 	actual, loaded := clientMap.LoadOrStore(client.ClientID(), client)
 	rlog.Info("clientMap.LoadOrStore(client.ClientID(), client)", map[string]interface{}{
 		"client.ClientID()": client.ClientID(),
